@@ -29,11 +29,40 @@ const SOLUTION = [
   "machiya2"  // 8
 ];
 
-const gridEl   = document.getElementById("grid");
-const trayEl   = document.getElementById("tray");
+const gridEl    = document.getElementById("grid");
+const trayEl    = document.getElementById("tray");
 const messageEl = document.getElementById("message");
-const checkBtn = document.getElementById("checkBtn");
-const resetBtn = document.getElementById("resetBtn");
+const checkBtn  = document.getElementById("checkBtn");
+const resetBtn  = document.getElementById("resetBtn");
+
+// スマホ用：今選択している建物ID（タップ操作用）
+let selectedBuildingId = null;
+
+// ===== ユーティリティ =====
+
+function findCardElementById(buildingId) {
+  return document.querySelector(
+    `.building-card[data-building-id="${buildingId}"]`
+  );
+}
+
+function clearSelection() {
+  selectedBuildingId = null;
+  document
+    .querySelectorAll(".building-card.selected-card")
+    .forEach((card) => card.classList.remove("selected-card"));
+}
+
+function selectCard(buildingId, cardEl) {
+  // 同じカードをもう一度タップ → 選択解除
+  if (selectedBuildingId === buildingId) {
+    clearSelection();
+    return;
+  }
+  clearSelection();
+  selectedBuildingId = buildingId;
+  cardEl.classList.add("selected-card");
+}
 
 // ===== マップ（9マス）生成 =====
 
@@ -50,7 +79,7 @@ function createGrid() {
     idxLabel.textContent = i;
     cell.appendChild(idxLabel);
 
-    // ドロップイベント
+    // PC向け：ドラッグ中のカードを受け取る
     cell.addEventListener("dragover", (e) => {
       e.preventDefault();
     });
@@ -59,6 +88,14 @@ function createGrid() {
       const buildingId = e.dataTransfer.getData("text/plain");
       if (!buildingId) return;
       placeCardInCell(buildingId, cell);
+      clearSelection();
+    });
+
+    // スマホ向け：カード選択後にマスをタップで配置
+    cell.addEventListener("click", () => {
+      if (!selectedBuildingId) return;
+      placeCardInCell(selectedBuildingId, cell);
+      clearSelection();
     });
 
     gridEl.appendChild(cell);
@@ -88,24 +125,25 @@ function createCards() {
     card.appendChild(img);
     card.appendChild(label);
 
-    // ドラッグ開始
+    // PC向け：ドラッグ開始
     card.addEventListener("dragstart", (e) => {
       e.dataTransfer.setData("text/plain", b.id);
       e.dataTransfer.effectAllowed = "move";
+      // 見た目も選択状態にしておくとわかりやすい
+      selectCard(b.id, card);
+    });
+
+    // スマホ向け：タップで選択 → マスをタップで配置
+    card.addEventListener("click", () => {
+      selectCard(b.id, card);
     });
 
     trayEl.appendChild(card);
   });
 }
 
-// buildingId からカード要素を見つける
-function findCardElementById(buildingId) {
-  return document.querySelector(
-    `.building-card[data-building-id="${buildingId}"]`
-  );
-}
+// ===== セルにカードを置く処理 =====
 
-// セルにカードを置く
 function placeCardInCell(buildingId, cellEl) {
   // すでにそのセルにカードがあればトレイに戻す
   const existing = cellEl.querySelector(".building-card");
@@ -123,13 +161,15 @@ function placeCardInCell(buildingId, cellEl) {
   }
 
   // セルに追加
-  card.classList.remove("bg-emerald-50", "border-emerald-400");
+  card.classList.remove("selected-card");
   cellEl.appendChild(card);
 }
 
 // ===== リセット・判定 =====
 
 function resetGame() {
+  clearSelection();
+
   messageEl.textContent = "";
   messageEl.className = "text-sm font-semibold ml-1";
 
