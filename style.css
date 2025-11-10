@@ -1,0 +1,119 @@
+/* ---- 方位記号まわりのレイアウト ---- */
+
+.compass-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.compass-middle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.compass-n,
+.compass-s {
+  font-size: 0.75rem;
+  color: #64748b; /* slate-500 */
+  font-weight: 600;
+}
+
+.compass-w,
+.compass-e {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* 9マスのマップ部分 */
+.grid-board {
+  width: min(260px, 70vw);
+  aspect-ratio: 1 / 1;
+  background-color: #e5e7eb; /* slate-200 */
+  border-radius: 0.75rem;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+/* マスの共通スタイル（JS側で追加もする） */
+.grid-cell {
+  position: relative;
+  background-color: #f9fafb; /* slate-50 */
+  border-radius: 0.75rem;
+  border: 1px solid #cbd5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* マスのインデックス（左上の小さい数字） */
+.cell-index {
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  font-size: 10px;
+  color: #cbd5e1; /* slate-300 */
+}
+
+/* ---- 建物カード ---- */
+
+.building-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 86px;
+  padding: 6px 4px;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0; /* slate-200 */
+  font-size: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  cursor: grab;
+  user-select: none;
+}
+
+.building-card:hover {
+  background-color: #f8fafc; /* slate-50 */
+}
+
+.building-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+/* マップ上に置かれたとき、カードがマス中央に収まるように */
+.grid-cell .building-card {
+  width: 90%;
+  max-width: 100px;
+}
+
+/* メッセージ用 */
+#message {
+  transition: color 0.2s ease;
+}
+
+/* スマホ対応（小さめのカードに） */
+@media (max-width: 480px) {
+  .building-card {
+    width: 76px;
+    padding: 4px 2px;
+    font-size: 11px;
+  }
+
+  .building-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .grid-board {
+    width: 80vw;
+  }
+}
