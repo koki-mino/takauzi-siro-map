@@ -3,10 +3,10 @@
 // 建物ID・表示名・画像パス
 const BUILDINGS = [
   { id: "tera",     label: "寺",          img: "img/tera.png" },
-  { id: "honmaru",  label: "本丸",        img: "img/honmaru.png" },
   { id: "uma",      label: "馬屋",        img: "img/uma.png" },
   { id: "yumi",     label: "弓場",        img: "img/yumi.png" },
   { id: "ichi",     label: "市（いちば）", img: "img/ichi.png" },
+  { id: "honmaru",  label: "本丸",        img: "img/honmaru.png" },
   { id: "machiya1", label: "町屋①",      img: "img/machiya1.png" },
   { id: "jomon",    label: "城門",        img: "img/jomon.png" },
   { id: "hashi",    label: "橋",          img: "img/hashi.png" },
