@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>足利尊氏のお城マップゲーム</title>
+
+  <!-- Tailwind CSS（CDN） -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- カスタムCSS -->
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+  <div class="max-w-5xl w-full bg-white rounded-2xl shadow-lg p-4 md:p-6 space-y-4">
+    <!-- タイトル -->
+    <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+      <div>
+        <h1 class="text-xl md:text-2xl font-bold text-slate-800">
+          足利尊氏のお城マップゲーム
+        </h1>
+        <p class="text-sm text-slate-500">
+          建物カードをドラッグして9マスの上に置き、正しいお城マップを完成させよう！
+        </p>
+      </div>
+      <div class="text-xs text-slate-500 md:text-right">
+        ↑ 北（きた）／↓ 南（みなみ）／→ 東（ひがし）／← 西（にし）
+      </div>
+    </header>
+
+    <div class="grid md:grid-cols-[2fr,1.4fr] gap-4">
+      <!-- マップ（9マス＋方位記号） -->
+      <section>
+        <h2 class="text-sm font-semibold text-slate-700 mb-2">お城の土地（9マス）</h2>
+
+        <div class="compass-wrapper">
+          <!-- 北 -->
+          <div class="compass-n">北</div>
+
+          <div class="compass-middle">
+            <!-- 西 -->
+            <div class="compass-w">西</div>
+
+            <!-- 9マスグリッド -->
+            <div id="grid" class="grid-board">
+              <!-- マスは main.js で自動生成 -->
+            </div>
+
+            <!-- 東 -->
+            <div class="compass-e">東</div>
+          </div>
+
+          <!-- 南 -->
+          <div class="compass-s">南</div>
+        </div>
+
+        <!-- ボタン＆メッセージ -->
+        <div class="mt-4 flex flex-wrap items-center gap-2">
+          <button id="checkBtn"
+                  class="px-4 py-2 rounded-full text-sm font-semibold bg-emerald-500 text-white hover:bg-emerald-600 transition">
+            並べた配置をチェック
+          </button>
+          <button id="resetBtn"
+                  class="px-4 py-2 rounded-full text-sm font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300 transition">
+            リセット
+          </button>
+          <p id="message" class="text-sm font-semibold ml-1"></p>
+        </div>
+      </section>
+
+      <!-- 建物カード置き場 -->
+      <section>
+        <h2 class="text-sm font-semibold text-slate-700 mb-2">建物カード</h2>
+        <p class="text-xs text-slate-500 mb-2">
+          カードをドラッグして、マップのマスの上にドロップしてください。
+        </p>
+        <div id="tray"
+             class="min-h-[230px] bg-slate-50 rounded-xl border border-slate-200 p-2 flex flex-wrap gap-2">
+          <!-- カードは main.js で生成 -->
+        </div>
+
+        <!-- ヒントエリア -->
+        <details class="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-slate-700">
+          <summary class="font-semibold cursor-pointer">
+            ヒント（情報カード）をひらく
+          </summary>
+          <ul class="mt-2 list-disc list-inside space-y-1">
+            <li>本丸は、市より北にある。</li>
+            <li>市は、橋のちょうど北にある。</li>
+            <li>橋は、城門のすぐとなりにある。</li>
+            <li>城門は、お城のいちばん南の列（下のだん）にある。</li>
+            <li>寺は、本丸と同じ横ならびにある。</li>
+            <li>弓場は、市と同じ横ならびにある。</li>
+            <li>馬屋は、本丸のとなりにある。</li>
+            <li>本丸・寺・弓場は、いちばん東には建てられていない。</li>
+            <li>市は、橋の近くにある。</li>
+            <li>町屋１は、市のとなりにある。</li>
+            <li>町屋２は、橋のとなりにある。</li>
+            <li>寺と城門は、同じ列（たてのならび）にある。</li>
+            <li>馬屋は、市とは同じ列（たてのならび）にはない。</li>
+            <li>橋は、お城のいちばん南の列（下のだん）の、まんなかのマスにある。</li>
+            <li>町屋②は、お城のいちばん南の列（下のだん）にある。</li>
+            <li>寺は、お城の北西（いちばん上の左）のマスにある。</li>
+          </ul>
+        </details>
+      </section>
+    </div>
+  </div>
+
+  <!-- ゲーム用スクリプト -->
+  <script src="./main.js"></script>
+</body>
+</html>
