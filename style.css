@@ -117,3 +117,28 @@
     width: 80vw;
   }
 }
+
+/* スマホ対応（小さめのカードに） */
+@media (max-width: 480px) {
+  .building-card {
+    width: 76px;
+    padding: 4px 2px;
+    font-size: 11px;
+  }
+
+  .building-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .grid-board {
+    width: 80vw;
+  }
+}
+
+/* ---- スマホ用：選択中カードの見た目 ---- */
+
+.selected-card {
+  border-color: #60a5fa; /* 青っぽく */
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.45);
+}
