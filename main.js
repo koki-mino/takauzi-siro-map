@@ -114,7 +114,6 @@ const LEVELS = {
     ]
   }
 };
-};
 
 // 現在のレベル
 let currentLevel = 1;
