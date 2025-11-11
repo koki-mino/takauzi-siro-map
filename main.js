@@ -1,44 +1,112 @@
-// ===== 設定 =====
+// ===== レベル設定 =====
 
 // 建物ID・表示名・画像パス
 const BUILDINGS = [
   { id: "tera",     label: "寺",          img: "img/tera.png" },
+  { id: "honmaru",  label: "本丸",        img: "img/honmaru.png" },
   { id: "uma",      label: "馬屋",        img: "img/uma.png" },
   { id: "yumi",     label: "弓場",        img: "img/yumi.png" },
   { id: "ichi",     label: "市（いちば）", img: "img/ichi.png" },
-  { id: "honmaru",  label: "本丸",        img: "img/honmaru.png" },
   { id: "machiya1", label: "町屋①",      img: "img/machiya1.png" },
   { id: "jomon",    label: "城門",        img: "img/jomon.png" },
   { id: "hashi",    label: "橋",          img: "img/hashi.png" },
   { id: "machiya2", label: "町屋②",      img: "img/machiya2.png" }
 ];
 
-// 正解の配置（インデックス0〜8）
-// 北： 寺 / 本丸 / 馬屋
-// 中： 弓場 / 市 / 町屋①
-// 南： 城門 / 橋 / 町屋②
-const SOLUTION = [
-  "tera",     // 0
-  "honmaru",  // 1
-  "uma",      // 2
-  "yumi",     // 3
-  "ichi",     // 4
-  "machiya1", // 5
-  "jomon",    // 6
-  "hashi",    // 7
-  "machiya2"  // 8
-];
+// レベルごとの正解配置とヒント
+// マス番号は 0〜8 : 北 [0,1,2] / 中 [3,4,5] / 南 [6,7,8]
+const LEVELS = {
+  1: {
+    // レベル1：北＝寺・本丸・馬屋
+    solution: [
+      "tera",     // 0
+      "honmaru",  // 1
+      "uma",      // 2
+      "yumi",     // 3
+      "ichi",     // 4
+      "machiya1", // 5
+      "jomon",    // 6
+      "hashi",    // 7
+      "machiya2"  // 8
+    ],
+    hints: [
+      "本丸は、市より北にある。",
+      "市は、橋のちょうど北にある。",
+      "橋は、城門のすぐとなりにある。",
+      "城門は、お城のいちばん南の列（下のだん）にある。",
+      "寺は、本丸と同じ横ならびにある。",
+      "弓場は、市と同じ横ならびにある。",
+      "馬屋は、本丸のとなりにある。",
+      "本丸・寺・弓場は、いちばん東には建てられていない。",
+      "市は、橋の近くにある。",
+      "町屋①は、市のとなりにある。",
+      "町屋②は、橋のとなりにある。",
+      "寺と城門は、同じ列（たてのならび）にある。",
+      "馬屋は、市とは同じ列（たてのならび）にはない。",
+      "橋は、お城のいちばん南の列（下のだん）の、まんなかのマスにある。",
+      "町屋②は、お城のいちばん南の列（下のだん）にある。",
+      "寺は、お城の北西（いちばん上の左）のマスにある。"
+    ]
+  },
+  2: {
+    // レベル2：北＝馬屋・本丸・寺
+    solution: [
+      "uma",      // 0
+      "honmaru",  // 1
+      "tera",     // 2
+      "yumi",     // 3
+      "ichi",     // 4
+      "machiya1", // 5
+      "machiya2", // 6
+      "hashi",    // 7
+      "jomon"     // 8
+    ],
+    hints: [
+      "市は、お城のまんなかのマスにある。",
+      "本丸は、市のちょうど北にある。",
+      "馬屋は、本丸の西どなりにある。",
+      "寺は、本丸と同じ横ならびで、本丸の東どなりにある。",
+      "弓場は、市と同じ横ならびで、市より西にある。",
+      "町屋①は、市の東どなりにある。",
+      "橋は、市と同じ列（たてのならび）で、市のちょうど南にある。",
+      "城門は、橋の東どなりにある。",
+      "町屋②は、弓場のちょうど南にある。",
+      "城門は、お城のいちばん南の列（下のだん）にある。",
+      "馬屋と町屋②は、同じ列（たてのならび）にある。",
+      "寺は、お城のいちばん東の列（右の列）にある。",
+      "本丸・市・橋は、すべて同じ列（たてのならび）にある。",
+      "馬屋と町屋①は、同じ列（たてのならび）にはない。",
+      "町屋②は、お城のいちばん南の列（下のだん）にある。",
+      "寺と城門は、同じ列（たてのならび）にある。"
+    ]
+  }
+};
 
-const gridEl    = document.getElementById("grid");
-const trayEl    = document.getElementById("tray");
-const messageEl = document.getElementById("message");
-const checkBtn  = document.getElementById("checkBtn");
-const resetBtn  = document.getElementById("resetBtn");
+// 現在のレベル
+let currentLevel = 1;
+
+// DOM取得
+const gridEl     = document.getElementById("grid");
+const trayEl     = document.getElementById("tray");
+const messageEl  = document.getElementById("message");
+const checkBtn   = document.getElementById("checkBtn");
+const resetBtn   = document.getElementById("resetBtn");
+const level1Btn  = document.getElementById("level1Btn");
+const level2Btn  = document.getElementById("level2Btn");
+const hintsList  = document.getElementById("hintsList");
 
 // スマホ用：今選択している建物ID（タップ操作用）
 let selectedBuildingId = null;
 
 // ===== ユーティリティ =====
+
+function getCurrentSolution() {
+  return LEVELS[currentLevel].solution;
+}
+
+function getCurrentHints() {
+  return LEVELS[currentLevel].hints;
+}
 
 function findCardElementById(buildingId) {
   return document.querySelector(
@@ -53,15 +121,16 @@ function clearSelection() {
     .forEach((card) => card.classList.remove("selected-card"));
 }
 
-function selectCard(buildingId, cardEl) {
-  // 同じカードをもう一度タップ → 選択解除
-  if (selectedBuildingId === buildingId) {
-    clearSelection();
-    return;
-  }
-  clearSelection();
-  selectedBuildingId = buildingId;
-  cardEl.classList.add("selected-card");
+// ===== ヒント描画 =====
+
+function renderHints() {
+  hintsList.innerHTML = "";
+  const hints = getCurrentHints();
+  hints.forEach((text) => {
+    const li = document.createElement("li");
+    li.textContent = text;
+    hintsList.appendChild(li);
+  });
 }
 
 // ===== マップ（9マス）生成 =====
@@ -73,7 +142,6 @@ function createGrid() {
     cell.className = "grid-cell";
     cell.dataset.index = String(i);
 
-    // 左上に小さいインデックス（先生用・デバッグ用）
     const idxLabel = document.createElement("div");
     idxLabel.className = "cell-index";
     idxLabel.textContent = i;
@@ -112,13 +180,11 @@ function createCards() {
     card.draggable = true;
     card.dataset.buildingId = b.id;
 
-    // 画像アイコン
     const img = document.createElement("img");
     img.src = b.img;
     img.alt = b.label;
     img.className = "building-icon";
 
-    // テキスト
     const label = document.createElement("div");
     label.textContent = b.label;
 
@@ -129,7 +195,6 @@ function createCards() {
     card.addEventListener("dragstart", (e) => {
       e.dataTransfer.setData("text/plain", b.id);
       e.dataTransfer.effectAllowed = "move";
-      // 見た目も選択状態にしておくとわかりやすい
       selectCard(b.id, card);
     });
 
@@ -142,10 +207,19 @@ function createCards() {
   });
 }
 
+function selectCard(buildingId, cardEl) {
+  if (selectedBuildingId === buildingId) {
+    clearSelection();
+    return;
+  }
+  clearSelection();
+  selectedBuildingId = buildingId;
+  cardEl.classList.add("selected-card");
+}
+
 // ===== セルにカードを置く処理 =====
 
 function placeCardInCell(buildingId, cellEl) {
-  // すでにそのセルにカードがあればトレイに戻す
   const existing = cellEl.querySelector(".building-card");
   if (existing) {
     trayEl.appendChild(existing);
@@ -154,13 +228,11 @@ function placeCardInCell(buildingId, cellEl) {
   const card = findCardElementById(buildingId);
   if (!card) return;
 
-  // もし別のセルにあれば、そこから外す
   const parent = card.parentElement;
   if (parent && parent !== trayEl && parent !== cellEl) {
     parent.removeChild(card);
   }
 
-  // セルに追加
   card.classList.remove("selected-card");
   cellEl.appendChild(card);
 }
@@ -189,16 +261,16 @@ function resetGame() {
 
 function checkAnswer() {
   let correctCount = 0;
+  const solution = getCurrentSolution();
 
   document.querySelectorAll("#grid > .grid-cell").forEach((cell) => {
     cell.classList.remove("ring-2", "ring-red-400", "ring-emerald-400");
 
     const idx = Number(cell.dataset.index);
-    const expectedId = SOLUTION[idx];
+    const expectedId = solution[idx];
     const placedCard = cell.querySelector(".building-card");
 
     if (!placedCard) {
-      // 何も置いていないマス
       cell.classList.add("ring-2", "ring-red-400");
       return;
     }
@@ -217,7 +289,7 @@ function checkAnswer() {
   ).filter((cell) => !cell.querySelector(".building-card")).length;
 
   if (correctCount === 9) {
-    messageEl.textContent = "🎉 全問正解！ 完ぺきなお城マップです！";
+    messageEl.textContent = `🎉 レベル${currentLevel} クリア！ 完ぺきなお城マップです！`;
     messageEl.className = "text-sm font-semibold ml-1 text-emerald-600";
   } else if (emptyCells > 0) {
     messageEl.textContent =
@@ -230,10 +302,40 @@ function checkAnswer() {
   }
 }
 
+// ===== レベル切り替え処理 =====
+
+function updateLevelButtons() {
+  if (currentLevel === 1) {
+    level1Btn.className =
+      "px-3 py-1 rounded-full font-semibold bg-emerald-600 text-white shadow-sm";
+    level2Btn.className =
+      "px-3 py-1 rounded-full font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300";
+  } else {
+    level1Btn.className =
+      "px-3 py-1 rounded-full font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300";
+    level2Btn.className =
+      "px-3 py-1 rounded-full font-semibold bg-emerald-600 text-white shadow-sm";
+  }
+}
+
+function setLevel(level) {
+  if (!LEVELS[level]) return;
+  currentLevel = level;
+  updateLevelButtons();
+  resetGame();
+  renderHints();
+  messageEl.textContent = `レベル${level}に切り替えました。`;
+  messageEl.className = "text-sm font-semibold ml-1 text-slate-600";
+}
+
 // ===== 初期化 =====
 
 createGrid();
 createCards();
+renderHints();
+updateLevelButtons();
 
 checkBtn.addEventListener("click", checkAnswer);
 resetBtn.addEventListener("click", resetGame);
+level1Btn.addEventListener("click", () => setLevel(1));
+level2Btn.addEventListener("click", () => setLevel(2));
