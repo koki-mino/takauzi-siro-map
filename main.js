@@ -202,9 +202,11 @@ function createCards() {
     });
 
     // スマホ向け：タップで選択 → マスをタップで配置
-    card.addEventListener("click", () => {
-      selectCard(b.id, card);
-    });
+card.addEventListener("click", (e) => {
+  e.stopPropagation();          // ← ここがポイント！
+  selectCard(b.id, card);
+});
+
 
     trayEl.appendChild(card);
   });
