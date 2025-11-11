@@ -8,8 +8,8 @@
   <!-- Tailwind CSS（CDN） -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- カスタムCSS -->
-  <link rel="stylesheet" href="./style.css">
+  <!-- カスタムCSS（キャッシュ対策で ?v= を付ける） -->
+  <link rel="stylesheet" href="./style.css?v=20251111">
 </head>
 <body class="min-h-screen bg-slate-100 flex items-center justify-center p-4">
   <div class="max-w-5xl w-full bg-white rounded-2xl shadow-lg p-4 md:p-6 space-y-4">
@@ -24,7 +24,7 @@
         </p>
       </div>
       <div class="text-xs text-slate-500 md:text-right">
-        ※PCはドラッグアンドドロップ
+        ※PCはドラッグ＆ドロップでも動かせます
       </div>
     </header>
 
@@ -63,12 +63,11 @@
         </div>
       </section>
 
-
       <!-- 建物カード置き場 -->
       <section>
         <h2 class="text-sm font-semibold text-slate-700 mb-2">建物カード</h2>
         <p class="text-xs text-slate-500 mb-2">
-          カードをドラッグして、マップのマスの上にドロップしてください。
+          スマホ・タブレットの人は「カードをタップ → マスをタップ」、PCの人はドラッグ＆ドロップでマスに置いてください。
         </p>
         <div id="tray"
              class="min-h-[230px] bg-slate-50 rounded-xl border border-slate-200 p-2 flex flex-wrap gap-2">
@@ -90,20 +89,20 @@
             <li>馬屋は、本丸のとなりにある。</li>
             <li>本丸・寺・弓場は、いちばん東には建てられていない。</li>
             <li>市は、橋の近くにある。</li>
-            <li>町屋１は、市のとなりにある。</li>
-            <li>町屋２は、橋のとなりにある。</li>
-            <li>寺と城門は、同じ列（たてのならび）にある。</li>
-            <li>馬屋は、市とは同じ列（たてのならび）にはない。</li>
-            <li>橋は、お城のいちばん南の列（下のだん）の、まんなかのマスにある。</li>
-            <li>町屋②は、お城のいちばん南の列（下のだん）にある。</li>
-            <li>寺は、お城の北西（いちばん上の左）のマスにある。</li>
+            <li>町屋①は、市のとなりにある。</li>
+            <li>町屋②は、橋のとなりにある。</li>
+            <li>寺と城門は、同じ縦のならびにある。</li>
+            <li>馬屋は、市とは同じ縦の並びにはない。</li>
+            <li>橋は、お城のいちばん南の列の、まんなかのマスにある。</li>
+            <li>町屋②は、お城のいちばん南の列にある。</li>
+            <li>寺は、お城の北西のマスにある。</li>
           </ul>
         </details>
       </section>
     </div>
   </div>
 
-  <!-- ゲーム用スクリプト -->
-  <script src="./main.js"></script>
+  <!-- ゲーム用スクリプト（こちらも ?v= を付ける） -->
+  <script src="./main.js?v=20251111"></script>
 </body>
 </html>
