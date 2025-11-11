@@ -87,23 +87,27 @@
 
 /* ---- 建物カード ---- */
 
+
 .building-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  width: 86px;
-  padding: 6px 4px;
-  border-radius: 0.75rem;
-  border: 1px solid #e2e8f0; /* slate-200 */
+  width: 90px;
+  padding: 8px 6px;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.35); /* slate-300 */
   font-size: 12px;
-  background-color: #ffffff;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
-  cursor: grab;
+  background: radial-gradient(circle at top left, #f9fafb, #ffffff);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
+  cursor: pointer;
   user-select: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, background-color 0.12s ease;
 }
 
 .building-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.16);
   background-color: #f8fafc; /* slate-50 */
 }
 
@@ -115,9 +119,34 @@
 
 /* マップ上に置かれたとき、カードがマス中央に収まるように */
 .grid-cell .building-card {
-  width: 90%;
+  width: 86%;
   max-width: 100px;
 }
+
+/* スマホ対応（小さめのカードに） */
+@media (max-width: 480px) {
+  .building-card {
+    width: 80px;
+    padding: 6px 4px;
+    font-size: 11px;
+  }
+
+  .building-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .board-wrapper {
+    max-width: 320px;
+  }
+}
+
+/* スマホ用：選択中カードの見た目（タップ選択） */
+.selected-card {
+  border-color: #60a5fa; /* 青っぽく */
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.45);
+}
+
 
 /* メッセージ用 */
 #message {
