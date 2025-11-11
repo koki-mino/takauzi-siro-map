@@ -9,10 +9,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- カスタムCSS（キャッシュ対策で ?v= を付ける） -->
-  <link rel="stylesheet" href="./style.css?v=202511111">
+  <link rel="stylesheet" href="./style.css?v=20251112">
 </head>
 <body class="min-h-screen castle-bg flex items-center justify-center p-4">
-  <div class="max-w-5xl w-full bg-white rounded-2xl shadow-lg p-4 md:p-6 space-y-4">
+  <div class="max-w-5xl w-full bg-white/95 backdrop-blur rounded-2xl shadow-lg p-4 md:p-6 space-y-4">
     <!-- タイトル -->
     <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
       <div>
@@ -24,7 +24,7 @@
         </p>
       </div>
       <div class="text-xs text-slate-500 md:text-right">
-        ※PCはドラッグ＆ドロップでも動かせます
+        スマホ：カードをタップ → マスをタップ ／ PC：ドラッグ＆ドロップ
       </div>
     </header>
 
@@ -65,37 +65,38 @@
 
       <!-- 建物カード置き場 -->
       <section>
-        <h2 class="text-sm font-semibold text-slate-700 mb-2">建物カード</h2>
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-sm font-semibold text-slate-700">建物カード</h2>
+
+          <!-- レベル切り替えボタン -->
+          <div class="flex gap-1 text-xs">
+            <button id="level1Btn"
+                    class="px-3 py-1 rounded-full font-semibold bg-emerald-600 text-white shadow-sm">
+              レベル1
+            </button>
+            <button id="level2Btn"
+                    class="px-3 py-1 rounded-full font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300">
+              レベル2
+            </button>
+          </div>
+        </div>
+
         <p class="text-xs text-slate-500 mb-2">
-          スマホ・タブレットの人は「カードをタップ → マスをタップ」、PCの人はドラッグ＆ドロップでマスに置いてください。
+          カードを選んで、マップのマスの上に置いてください。レベルボタンで問題が変わります。
         </p>
+
         <div id="tray"
              class="min-h-[230px] bg-slate-50 rounded-xl border border-slate-200 p-2 flex flex-wrap gap-2">
           <!-- カードは main.js で生成 -->
         </div>
 
-        <!-- ヒントエリア -->
+        <!-- ヒントエリア（中身はJSで切り替え） -->
         <details class="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-slate-700">
           <summary class="font-semibold cursor-pointer">
             ヒント（情報カード）をひらく
           </summary>
-          <ul class="mt-2 list-disc list-inside space-y-1">
-            <li>本丸は、市より北にある。</li>
-            <li>市は、橋のちょうど北にある。</li>
-            <li>橋は、城門のすぐとなりにある。</li>
-            <li>城門は、お城のいちばん南の列（下のだん）にある。</li>
-            <li>寺は、本丸と同じ横ならびにある。</li>
-            <li>弓場は、市と同じ横ならびにある。</li>
-            <li>馬屋は、本丸のとなりにある。</li>
-            <li>本丸・寺・弓場は、いちばん東には建てられていない。</li>
-            <li>市は、橋の近くにある。</li>
-            <li>町屋①は、市のとなりにある。</li>
-            <li>町屋②は、橋のとなりにある。</li>
-            <li>寺と城門は、同じ縦のならびにある。</li>
-            <li>馬屋は、市とは同じ縦の並びにはない。</li>
-            <li>橋は、お城のいちばん南の列の、まんなかのマスにある。</li>
-            <li>町屋②は、お城のいちばん南の列にある。</li>
-            <li>寺は、お城の北西のマスにある。</li>
+          <ul id="hintsList" class="mt-2 list-disc list-inside space-y-1">
+            <!-- JavaScriptでレベルに応じたヒントを挿入 -->
           </ul>
         </details>
       </section>
@@ -103,6 +104,6 @@
   </div>
 
   <!-- ゲーム用スクリプト（こちらも ?v= を付ける） -->
-  <script src="./main.js?v=202511111"></script>
+  <script src="./main.js?v=20251112"></script>
 </body>
 </html>
