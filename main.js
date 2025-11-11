@@ -159,9 +159,23 @@ function createGrid() {
       clearSelection();
     });
 
-    // スマホ向け：カード選択後にマスをタップで配置
+    // スマホ＆タップ操作向け：
+    // 1回目のタップ → そのマスのカードを選択
+    // 2回目のタップ（別のマス）→ そこに配置
     cell.addEventListener("click", () => {
-      if (!selectedBuildingId) return;
+      const placedCard = cell.querySelector(".building-card");
+
+      if (!selectedBuildingId) {
+        // 何も選択していない状態で、カードがあるマスをタップ → そのカードを選択
+        if (placedCard) {
+          const id = placedCard.dataset.buildingId;
+          selectCard(id, placedCard);
+        }
+        // カードがないマスをタップしたときは何もしない
+        return;
+      }
+
+      // すでに何か選択している場合 → そのカードをこのマスに置く
       placeCardInCell(selectedBuildingId, cell);
       clearSelection();
     });
@@ -169,6 +183,7 @@ function createGrid() {
     gridEl.appendChild(cell);
   }
 }
+
 
 // ===== 建物カード生成 =====
 
