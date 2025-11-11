@@ -1,3 +1,7 @@
+// タッチデバイスかどうか（スマホ・タブレット判定用）
+const IS_TOUCH_DEVICE =
+  ("ontouchstart" in window) || (navigator.maxTouchPoints > 0);
+
 // ===== レベル設定 =====
 
 // 建物ID・表示名・画像パス
@@ -81,7 +85,7 @@ const LEVELS = {
     ]
   },
   3: {
-    // レベル3：北＝寺・馬屋・本丸
+    // レベル3：北＝寺・馬屋・本丸（ヒントに1つだけウソ）
     solution: [
       "tera",      // 0
       "uma",       // 1
@@ -126,7 +130,7 @@ const checkBtn   = document.getElementById("checkBtn");
 const resetBtn   = document.getElementById("resetBtn");
 const level1Btn  = document.getElementById("level1Btn");
 const level2Btn  = document.getElementById("level2Btn");
-const level3Btn  = document.getElementById("level3Btn"); 
+const level3Btn  = document.getElementById("level3Btn");
 const hintsList  = document.getElementById("hintsList");
 
 // スマホ用：今選択している建物ID（タップ操作用）
@@ -193,19 +197,17 @@ function createGrid() {
       clearSelection();
     });
 
-    // スマホ＆タップ操作向け：
-    // スマホ＆タップ操作向け：
-// 選択中のカードがあるときだけ、そのカードをこのマスに置く
-cell.addEventListener("click", () => {
-  if (!selectedBuildingId) return;
-  placeCardInCell(selectedBuildingId, cell);
-  clearSelection();
-});
+    // スマホ＆クリック操作向け：
+    // 選択中のカードがあるときだけ、そのカードをこのマスに置く
+    cell.addEventListener("click", () => {
+      if (!selectedBuildingId) return;
+      placeCardInCell(selectedBuildingId, cell);
+      clearSelection();
+    });
 
     gridEl.appendChild(cell);
   }
 }
-
 
 // ===== 建物カード生成 =====
 
@@ -214,7 +216,8 @@ function createCards() {
   BUILDINGS.forEach((b) => {
     const card = document.createElement("div");
     card.className = "building-card";
-    card.draggable = true;
+    // PCではドラッグOK、スマホ・タブレットではドラッグOFF
+    card.draggable = !IS_TOUCH_DEVICE;
     card.dataset.buildingId = b.id;
 
     const img = document.createElement("img");
@@ -229,18 +232,19 @@ function createCards() {
     card.appendChild(label);
 
     // PC向け：ドラッグ開始
-    card.addEventListener("dragstart", (e) => {
-      e.dataTransfer.setData("text/plain", b.id);
-      e.dataTransfer.effectAllowed = "move";
+    if (!IS_TOUCH_DEVICE) {
+      card.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("text/plain", b.id);
+        e.dataTransfer.effectAllowed = "move";
+        selectCard(b.id, card);
+      });
+    }
+
+    // スマホ＆PC共通：タップ／クリックで選択 → マスをタップで配置
+    card.addEventListener("click", (e) => {
+      e.stopPropagation(); // マス側のclickに伝えない
       selectCard(b.id, card);
     });
-
-    // スマホ向け：タップで選択 → マスをタップで配置
-card.addEventListener("click", (e) => {
-  e.stopPropagation();          // ← ここがポイント！
-  selectCard(b.id, card);
-});
-
 
     trayEl.appendChild(card);
   });
@@ -363,7 +367,6 @@ function updateLevelButtons() {
     level3Btn.className = active;
   }
 }
-
 
 function setLevel(level) {
   if (!LEVELS[level]) return;
