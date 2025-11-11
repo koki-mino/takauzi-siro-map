@@ -33,25 +33,20 @@
       <section>
         <h2 class="text-sm font-semibold text-slate-700 mb-2">お城の土地（9マス）</h2>
 
-        <div class="compass-wrapper">
-          <!-- 北 -->
-          <div class="compass-n">北</div>
-
-          <div class="compass-middle">
-            <!-- 西 -->
-            <div class="compass-w">西</div>
+        <!-- 中央にボード＋方位 -->
+        <div class="flex justify-center">
+          <div class="relative inline-block board-wrapper">
+            <!-- 方位ラベル -->
+            <div class="compass-label compass-n">北</div>
+            <div class="compass-label compass-s">南</div>
+            <div class="compass-label compass-w">西</div>
+            <div class="compass-label compass-e">東</div>
 
             <!-- 9マスグリッド -->
             <div id="grid" class="grid-board">
               <!-- マスは main.js で自動生成 -->
             </div>
-
-            <!-- 東 -->
-            <div class="compass-e">東</div>
           </div>
-
-          <!-- 南 -->
-          <div class="compass-s">南</div>
         </div>
 
         <!-- ボタン＆メッセージ -->
@@ -67,6 +62,7 @@
           <p id="message" class="text-sm font-semibold ml-1"></p>
         </div>
       </section>
+
 
       <!-- 建物カード置き場 -->
       <section>
