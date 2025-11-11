@@ -79,7 +79,41 @@ const LEVELS = {
       "町屋②は、お城のいちばん南の列（下のだん）にある。",
       "寺と城門は、同じ列（たてのならび）にある。"
     ]
+  },
+  3: {
+    // レベル3：北＝寺・馬屋・本丸
+    solution: [
+      "tera",      // 0
+      "uma",       // 1
+      "honmaru",   // 2
+      "yumi",      // 3
+      "ichi",      // 4
+      "hashi",     // 5
+      "machiya1",  // 6
+      "jomon",     // 7
+      "machiya2"   // 8
+    ],
+    hints: [
+      "市は、お城のまんなかのマスにある。",
+      "本丸は、市より北にあり、お城のいちばん東の列（右の列）にある。",
+      "橋は、市の東どなりにある。",
+      "弓場は、市の西どなりにある。",
+      "寺は、お城の北西（いちばん上の左）のマスにある。",
+      "馬屋は、寺の東どなりにあり、本丸の西どなりにある。",
+      "町屋①は、お城のいちばん南の列（下のだん）の西はじにある。",
+      "町屋②は、お城のいちばん南の列（下のだん）の東はじにある。",
+      "城門は、お城のいちばん南の列のまんなかのマスにある。",
+      "城門は、市のちょうど南にある。",
+      "弓場・市・橋は、同じ横ならびにある。",
+      "寺・馬屋・本丸も、同じ横ならびにある。",
+      "町屋①・城門・町屋②も、同じ横ならびにある。",
+      "寺と町屋①は、同じ列（たてのならび）にある。",
+      "本丸と町屋②は、同じ列（たてのならび）にある。",
+      // ★この1枚だけが「ウソの情報」です
+      "馬屋は、市とは同じ列（たてのならび）にはない。"
+    ]
   }
+};
 };
 
 // 現在のレベル
@@ -93,6 +127,7 @@ const checkBtn   = document.getElementById("checkBtn");
 const resetBtn   = document.getElementById("resetBtn");
 const level1Btn  = document.getElementById("level1Btn");
 const level2Btn  = document.getElementById("level2Btn");
+const level3Btn  = document.getElementById("level3Btn"); 
 const hintsList  = document.getElementById("hintsList");
 
 // スマホ用：今選択している建物ID（タップ操作用）
@@ -310,18 +345,26 @@ function checkAnswer() {
 // ===== レベル切り替え処理 =====
 
 function updateLevelButtons() {
+  const active =
+    "px-3 py-1 rounded-full font-semibold bg-emerald-600 text-white shadow-sm";
+  const inactive =
+    "px-3 py-1 rounded-full font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300";
+
+  // いったん全部「非アクティブ」に
+  level1Btn.className = inactive;
+  level2Btn.className = inactive;
+  level3Btn.className = inactive;
+
+  // 現在のレベルだけ「アクティブ」に
   if (currentLevel === 1) {
-    level1Btn.className =
-      "px-3 py-1 rounded-full font-semibold bg-emerald-600 text-white shadow-sm";
-    level2Btn.className =
-      "px-3 py-1 rounded-full font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300";
-  } else {
-    level1Btn.className =
-      "px-3 py-1 rounded-full font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300";
-    level2Btn.className =
-      "px-3 py-1 rounded-full font-semibold bg-emerald-600 text-white shadow-sm";
+    level1Btn.className = active;
+  } else if (currentLevel === 2) {
+    level2Btn.className = active;
+  } else if (currentLevel === 3) {
+    level3Btn.className = active;
   }
 }
+
 
 function setLevel(level) {
   if (!LEVELS[level]) return;
@@ -344,3 +387,4 @@ checkBtn.addEventListener("click", checkAnswer);
 resetBtn.addEventListener("click", resetGame);
 level1Btn.addEventListener("click", () => setLevel(1));
 level2Btn.addEventListener("click", () => setLevel(2));
+level3Btn.addEventListener("click", () => setLevel(3));
