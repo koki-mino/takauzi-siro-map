@@ -1,55 +1,42 @@
-/* ---- 方位記号まわりのレイアウト ---- */
+/* ---- 9マスのマップ部分 ---- */
 
-.compass-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
+.board-wrapper {
+  /* ボード全体の最大幅：スマホでも収まるように */
+  max-width: 360px;
+  width: 100%;
 }
 
-.compass-middle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.compass-n,
-.compass-s {
-  font-size: 0.75rem;
-  color: #64748b; /* slate-500 */
-  font-weight: 600;
-}
-
-.compass-w,
-.compass-e {
-  font-size: 0.75rem;
-  color: #64748b;
-  font-weight: 600;
-}
-
-/* 9マスのマップ部分 */
 .grid-board {
-  width: min(260px, 70vw);
+  width: 100%;
   aspect-ratio: 1 / 1;
-  background-color: #e5e7eb; /* slate-200 */
-  border-radius: 0.75rem;
-  padding: 4px;
+  background: linear-gradient(135deg, #e5e7eb, #f8fafc);
+  border-radius: 1rem;
+  padding: 6px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
+  gap: 6px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+  border: 1px solid rgba(148, 163, 184, 0.5);
 }
 
-/* マスの共通スタイル（JS側で追加もする） */
+/* マスの共通スタイル */
 .grid-cell {
   position: relative;
   background-color: #f9fafb; /* slate-50 */
-  border-radius: 0.75rem;
-  border: 1px solid #cbd5f5;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
   color: #94a3b8;
+  transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.grid-cell:hover {
+  background-color: #f1f5f9;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
 }
 
 /* マスのインデックス（左上の小さい数字） */
@@ -60,6 +47,43 @@
   font-size: 10px;
   color: #cbd5e1; /* slate-300 */
 }
+
+/* 方位ラベル（ボードの外側に小さく） */
+.compass-label {
+  position: absolute;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+  padding: 2px 6px;
+  background-color: rgba(248, 250, 252, 0.95); /* slate-50 */
+  border-radius: 9999px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.15);
+}
+
+.compass-n {
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.compass-s {
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.compass-w {
+  left: -22px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.compass-e {
+  right: -22px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 
 /* ---- 建物カード ---- */
 
